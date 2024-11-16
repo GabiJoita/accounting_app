@@ -3,7 +3,7 @@ from tkinter import messagebox
 from tkinter import ttk
 import sqlite3
 import customtkinter as cst
-from customtkinter import *
+
 
 # Database setup
 def setup_db():
@@ -25,20 +25,21 @@ def setup_db():
 
 
 def calculate_vat_and_total(price, vat_rate):
-    '''function which create a formula
-       to sum vat and and price    
-    '''
+    """function which create a formula
+       to sum vat and and price
+    """
     vat = price * vat_rate
     total = price + vat
     return vat, total
 
+
 def calculate_and_display_total():
-    '''display with this function
+    """display with this function
        vat and total
-    '''
+    """
     try:
         price = float(price_entry.get())
-        vat_rate = float(vat_rate_var.get()) / 100  
+        vat_rate = float(vat_rate_var.get()) / 100
 
         vat, total = calculate_vat_and_total(price, vat_rate)
 
@@ -54,7 +55,7 @@ def add_transaction():
     transaction_type = type_var.get()
     description = description_entry.get()
     price = price_entry.get()
-    vat = vat_entry_var.get()  
+    vat = vat_entry_var.get()
     date = date_entry.get()
     category = category_entry.get()
 
@@ -64,8 +65,8 @@ def add_transaction():
 
     try:
         price = float(price)
-        vat = float(vat) 
-        total = price + vat 
+        vat = float(vat)
+        total = price + vat
     except ValueError:
         messagebox.showerror("Input Error", "Invalid price or VAT. Please enter valid numbers.")
         return
@@ -90,6 +91,7 @@ def add_transaction():
     update_balance()
     view_transactions()
 
+
 # Function to update the balance
 def update_balance():
     conn = sqlite3.connect("accounting.db")
@@ -101,6 +103,7 @@ def update_balance():
     balance = income - expense
     balance_label.config(text=f"Current Balance: ${balance:.2f}")
     conn.close()
+
 
 # Function to view transactions
 def view_transactions():
@@ -114,6 +117,7 @@ def view_transactions():
     for row in rows:
         transactions_tree.insert("", tk.END, values=row)
     conn.close()
+
 
 # GUI setup
 root = tk.Tk()
