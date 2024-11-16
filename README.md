@@ -16,3 +16,4 @@ pip install customtkinter
 ```
 
 Preview:
+![text if image cannot be loaded](./images/image.jpg)
