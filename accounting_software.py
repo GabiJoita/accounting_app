@@ -203,5 +203,4 @@ setup_db()
 update_balance()
 view_transactions()
 
-# Run the GUI main loop
 root.mainloop()
