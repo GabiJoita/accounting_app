@@ -5,6 +5,10 @@ import plotly.express as px
 
 
 def setup_db():
+    """
+        This function ensures the database is initialized and ready for storing
+        transaction records when the app is started.
+    """
     conn = sqlite3.connect("accounting.db")
     cursor = conn.cursor()
     cursor.execute('''CREATE TABLE IF NOT EXISTS transactions (
@@ -22,12 +26,18 @@ def setup_db():
     conn.close()
 
 
-def add_transaction(customer_supplier, transaction_type, description, price, vat, total, date, category):
+def add_transaction(cst_spl, trs_type, dsc, prc, vt, ttl, dt, ctg):
+    """
+        create this function
+        to convert your input data into
+        transaction
+    """
     conn = sqlite3.connect("accounting.db")
     cursor = conn.cursor()
-    cursor.execute('''INSERT INTO transactions (customer_supplier, type, description, price, vat, total, date, category)
+    cursor.execute('''INSERT INTO transactions (customer_supplier, type,
+                    description, price, vat, total, date, category)
                       VALUES (?, ?, ?, ?, ?, ?, ?, ?)''',
-                   (customer_supplier, transaction_type, description, price, vat, total, date, category))
+                   (cst_spl, trs_type, dsc, prc, vt, ttl, dt, ctg))
     conn.commit()
     conn.close()
 
@@ -55,7 +65,8 @@ def calculate_balance():
 
 def plot_transactions():
     conn = sqlite3.connect("accounting.db")
-    df = pd.read_sql_query("SELECT type, SUM(total) as amount FROM transactions GROUP BY type", conn)
+    df = pd.read_sql_query("SELECT type, SUM(total)"
+                           " as amount FROM transactions GROUP BY type", conn)
     conn.close()
     fig = px.bar(df, x='type', y='amount', title="Income vs Expense", color='type',
                  labels={'type': 'Transaction Type', 'amount': 'Total Amount'},
@@ -84,7 +95,8 @@ with st.form("transaction_form"):
 
     submitted = st.form_submit_button("Add Transaction")
     if submitted:
-        add_transaction(customer_supplier, transaction_type, description, price, vat, total, str(date), category)
+        add_transaction(customer_supplier, transaction_type,
+                        description, price, vat, total, str(date), category)
         st.success(f"{transaction_type.capitalize()} added successfully!")
 
 income, expense, balance = calculate_balance()

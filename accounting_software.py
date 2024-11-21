@@ -46,7 +46,8 @@ def calculate_and_display_total():
         total_entry_var.set(f"{total:.2f}")
 
     except ValueError:
-        messagebox.showerror("Input Error", "Invalid price or VAT rate. Please enter valid numbers.")
+        messagebox.showerror("Input Error",
+                             "Invalid price or VAT rate. Please enter valid numbers.")
 
 
 def add_transaction():
@@ -77,9 +78,11 @@ def add_transaction():
 
     conn = sqlite3.connect("accounting.db")
     cursor = conn.cursor()
-    cursor.execute('''INSERT INTO transactions (customer_supplier, type, description, price, vat, total, date, category)
+    cursor.execute('''INSERT INTO transactions (customer_supplier, type, description,
+                      price, vat, total, date, category)
                       VALUES (?, ?, ?, ?, ?, ?, ?, ?)''',
-                   (customer_supplier, transaction_type, description, price, vat, total, date, category))
+                   (customer_supplier, transaction_type,
+                    description, price, vat, total, date, category))
     conn.commit()
     conn.close()
 
@@ -132,7 +135,8 @@ root.title("Accounting Program")
 
 root.configure(bg="#204bb9")
 
-button_style = {"bg": "#46c2dd", "fg": "white", "activebackground": "#388e3c", "activeforeground": "white"}
+button_style = {"bg": "#46c2dd", "fg": "white",
+                "active-background": "#388e3c", "active-foreground": "white"}
 
 label_style = {"bg": "#f0f0f0", "fg": "#333"}
 entry_bg_color = "#204bb9"
