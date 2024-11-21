@@ -4,7 +4,6 @@ import pandas as pd
 import plotly.express as px
 
 
-# Database setup
 def setup_db():
     conn = sqlite3.connect("accounting.db")
     cursor = conn.cursor()
@@ -23,7 +22,6 @@ def setup_db():
     conn.close()
 
 
-# Function to add a transaction
 def add_transaction(customer_supplier, transaction_type, description, price, vat, total, date, category):
     conn = sqlite3.connect("accounting.db")
     cursor = conn.cursor()
@@ -34,7 +32,6 @@ def add_transaction(customer_supplier, transaction_type, description, price, vat
     conn.close()
 
 
-# Function to get all transactions
 def get_transactions():
     conn = sqlite3.connect("accounting.db")
     cursor = conn.cursor()
@@ -56,7 +53,6 @@ def calculate_balance():
     return income_st, expense_st, balance_st
 
 
-# Function to create a Plotly bar chart
 def plot_transactions():
     conn = sqlite3.connect("accounting.db")
     df = pd.read_sql_query("SELECT type, SUM(total) as amount FROM transactions GROUP BY type", conn)
@@ -67,13 +63,10 @@ def plot_transactions():
     st.plotly_chart(fig)
 
 
-# Streamlit App
 st.title("Accounting Web Application")
 
-# Setup database
 setup_db()
 
-# Form for adding transactions
 with st.form("transaction_form"):
     st.subheader("Add New Transaction")
     customer_supplier = st.text_input("Customer/Supplier")
@@ -84,13 +77,11 @@ with st.form("transaction_form"):
     date = st.date_input("Date")
     category = st.text_input("Category")
 
-    # Calculate VAT and Total
     vat = price * (vat_rate / 100)
     total = price + vat
     st.write(f"Calculated VAT: {vat:.2f}")
     st.write(f"Total Amount: {total:.2f}")
 
-    # Submit button
     submitted = st.form_submit_button("Add Transaction")
     if submitted:
         add_transaction(customer_supplier, transaction_type, description, price, vat, total, str(date), category)

@@ -5,7 +5,6 @@ import sqlite3
 import customtkinter as cst
 
 
-# Database setup
 def setup_db():
     conn = sqlite3.connect("accounting.db")
     cursor = conn.cursor()
@@ -51,6 +50,11 @@ def calculate_and_display_total():
 
 
 def add_transaction():
+    """
+        create this function
+        to convert your input data into
+        transaction
+    """
     customer_supplier = customer_supplier_entry.get()
     transaction_type = type_var.get()
     description = description_entry.get()
@@ -79,7 +83,6 @@ def add_transaction():
     conn.commit()
     conn.close()
 
-    # Clear input fields
     customer_supplier_entry.delete(0, tk.END)
     description_entry.delete(0, tk.END)
     price_entry.delete(0, tk.END)
@@ -92,8 +95,11 @@ def add_transaction():
     view_transactions()
 
 
-# Function to update the balance
 def update_balance():
+    """
+        this function allows you to
+        update your db with the new data
+    """
     conn = sqlite3.connect("accounting.db")
     cursor = conn.cursor()
     cursor.execute("SELECT SUM(total) FROM transactions WHERE type='income'")
@@ -105,8 +111,10 @@ def update_balance():
     conn.close()
 
 
-# Function to view transactions
 def view_transactions():
+    """now you add data inside widget,
+       view the results in the displayed table.
+    """
     for row in transactions_tree.get_children():
         transactions_tree.delete(row)
 
@@ -119,82 +127,65 @@ def view_transactions():
     conn.close()
 
 
-# GUI setup
 root = tk.Tk()
 root.title("Accounting Program")
 
-# Set the background color of the main window
-root.configure(bg="#204bb9")  # Light grey background
+root.configure(bg="#204bb9")
 
-# Define button styles
 button_style = {"bg": "#46c2dd", "fg": "white", "activebackground": "#388e3c", "activeforeground": "white"}
 
-# Define label and entry colors
 label_style = {"bg": "#f0f0f0", "fg": "#333"}
 entry_bg_color = "#204bb9"
 
-# Customer/Supplier Entry
 tk.Label(root, text="Customer/Supplier:", bg=entry_bg_color, fg='white').grid(row=0, column=0, padx=10, pady=5)
 customer_supplier_entry = tk.Entry(root)
 customer_supplier_entry.grid(row=0, column=1, padx=10, pady=5)
 
-# Type (Income/Expense)
 tk.Label(root, text="Type:", bg=entry_bg_color, fg='white').grid(row=1, column=0, padx=10, pady=5)
 type_var = tk.StringVar(value="income")
 type_option = ttk.Combobox(root, textvariable=type_var, values=["income", "expense"])
 type_option.grid(row=1, column=1, padx=10, pady=5)
 
-# Description Entry
 tk.Label(root, text="Description:", bg=entry_bg_color, fg='white').grid(row=2, column=0, padx=10, pady=5)
 description_entry = tk.Entry(root)
 description_entry.grid(row=2, column=1, padx=10, pady=5)
 
-# Price Entry
 tk.Label(root, text="Price:", bg=entry_bg_color, fg='white').grid(row=3, column=0, padx=10, pady=5)
 price_entry = tk.Entry(root)
 price_entry.grid(row=3, column=1, padx=10, pady=5)
 
-# VAT Rate Selection (19%, 9%, 0%)
 tk.Label(root, text="Select VAT Rate:", bg=entry_bg_color, fg='white').grid(row=4, column=0, padx=10, pady=5)
-vat_rate_var = tk.StringVar(value="19")  # Default VAT is 19%
+vat_rate_var = tk.StringVar(value="19")
 vat_rate_option = ttk.Combobox(root, textvariable=vat_rate_var, values=["19", "9", "0"])
 vat_rate_option.grid(row=4, column=1, padx=10, pady=5)
 
-# VAT and Total Calculation Button
 calculate_button = cst.CTkButton(root, text="Calculate VAT and Total", command=calculate_and_display_total)
 calculate_button.grid(row=3, column=2, padx=10, pady=5)
 
-# VAT Entry (Read-Only)
 tk.Label(root, text="Calculated VAT:", bg=entry_bg_color, fg='white').grid(row=5, column=0, padx=10, pady=5)
 vat_entry_var = tk.StringVar()
 vat_entry = tk.Entry(root, textvariable=vat_entry_var, state="readonly")
 vat_entry.grid(row=5, column=1, padx=10, pady=5)
 
-# Total Entry (Read-Only)
 tk.Label(root, text="Calculated Total:", bg=entry_bg_color, fg='white').grid(row=6, column=0, padx=10, pady=5)
 total_entry_var = tk.StringVar()
 total_entry = tk.Entry(root, textvariable=total_entry_var, state="readonly")
 total_entry.grid(row=6, column=1, padx=10, pady=5)
 
-# Date Entry
 tk.Label(root, text="Date (YYYY-MM-DD):", bg=entry_bg_color, fg='white').grid(row=7, column=0, padx=10, pady=5)
 date_entry = tk.Entry(root)
 date_entry.grid(row=7, column=1, padx=10, pady=5)
 
-# Category Entry
 tk.Label(root, text="Category:", bg=entry_bg_color, fg='white').grid(row=8, column=0, padx=10, pady=5)
 category_entry = tk.Entry(root)
 category_entry.grid(row=8, column=1, padx=10, pady=5)
 
-# Add Transaction Button
 add_button = cst.CTkButton(root, text="Add Transaction", command=add_transaction)
 add_button.grid(row=9, column=0, columnspan=2, padx=10, pady=10)
 
-# Balance Label
 balance_label = tk.Label(root, text="Current Balance: $0.00", bg=entry_bg_color, fg='white', font=("Arial", 14))
 balance_label.grid(row=10, column=0, columnspan=2, padx=10, pady=10)
 
-# Transactions History Table
 columns = ("ID", "Customer/Supplier", "Type", "Description", "Price", "VAT", "Total", "Date", "Category")
 transactions_tree = ttk.Treeview(root, columns=columns, show="headings")
 for col in columns:
@@ -202,7 +193,6 @@ for col in columns:
     transactions_tree.column(col, width=120)
 transactions_tree.grid(row=11, column=0, columnspan=3, padx=10, pady=10)
 
-# Initialize database and update balance
 setup_db()
 update_balance()
 view_transactions()
