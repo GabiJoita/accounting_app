@@ -21,6 +21,9 @@ pip install streamlit
 pip install plotly
 pip install sqlite3
 pip install pandas
+
+to run streamlit version, use the command:
+C:\your\path\ streamlit run st_version.py
 ```
 
 Preview:
