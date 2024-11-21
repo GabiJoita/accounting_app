@@ -25,3 +25,5 @@ pip install pandas
 
 Preview:
 ![text if image cannot be loaded](./images/image.jpg)
+![text if image cannot be loaded](./images/image_2.jpg)
+![text if image cannot be loaded](./images/image_3.jpg)
