@@ -44,7 +44,6 @@ def get_transactions():
     return rows
 
 
-# Function to calculate balance
 def calculate_balance():
     conn = sqlite3.connect("accounting.db")
     cursor = conn.cursor()
@@ -97,13 +96,11 @@ with st.form("transaction_form"):
         add_transaction(customer_supplier, transaction_type, description, price, vat, total, str(date), category)
         st.success(f"{transaction_type.capitalize()} added successfully!")
 
-# Display current balance
 income, expense, balance = calculate_balance()
 st.metric("Total Income", f"${income:.2f}")
 st.metric("Total Expense", f"${expense:.2f}")
 st.metric("Current Balance", f"${balance:.2f}")
 
-# Display transactions table
 st.subheader("Transaction History")
 transactions = get_transactions()
 df = pd.DataFrame(transactions,
@@ -111,6 +108,5 @@ df = pd.DataFrame(transactions,
                            "Category"])
 st.dataframe(df)
 
-# Plot income and expenses
 st.subheader("Income vs Expense Chart")
 plot_transactions()
