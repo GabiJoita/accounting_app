@@ -48,12 +48,12 @@ def calculate_balance():
     conn = sqlite3.connect("accounting.db")
     cursor = conn.cursor()
     cursor.execute("SELECT SUM(total) FROM transactions WHERE type='income'")
-    income = cursor.fetchone()[0] or 0
+    income_st = cursor.fetchone()[0] or 0
     cursor.execute("SELECT SUM(total) FROM transactions WHERE type='expense'")
-    expense = cursor.fetchone()[0] or 0
-    balance = income - expense
+    expense_st = cursor.fetchone()[0] or 0
+    balance_st = income_st - expense_st
     conn.close()
-    return income, expense, balance
+    return income_st, expense_st, balance_st
 
 
 # Function to create a Plotly bar chart
